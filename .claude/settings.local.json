@@ -19,7 +19,19 @@
       "Bash(python -c \"import webview; print\\('pywebview ok'\\)\")",
       "Bash(python -c \"import PyInstaller; print\\('pyinstaller ok'\\)\")",
       "Bash(python:*)",
-      "Bash(start:*)"
+      "Bash(start:*)",
+      "Bash(pyinstaller desktop/build.spec)",
+      "Bash(where iscc:*)",
+      "Bash(reg query:*)",
+      "Bash(where /r \"C:\\\\Program Files \\(x86\\)\" \"iscc.exe\")",
+      "Bash(where /r \"C:\\\\Program Files\" \"iscc.exe\")",
+      "Bash(mkdir -p \"C:\\\\Users\\\\Miguel\\\\Desktop\\\\Projeto IQ option\\\\finance\\\\logs\")",
+      "Bash(curl -s http://127.0.0.1:8050)",
+      "Bash(curl -s http://127.0.0.1:8000/health)",
+      "Bash(pyinstaller desktop/build.spec -y)",
+      "Bash(where iscc.exe)",
+      "Read(//c/Program Files \\(x86\\)/Inno Setup 6/**)",
+      "Read(//c/Program Files/Inno Setup 6/**)"
     ]
   }
 }

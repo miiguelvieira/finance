@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: finance-app
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python src/server.py
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: finance-db
+          property: connectionString
+      - key: API_PORT
+        value: "8000"
+      - key: DASH_PORT
+        value: "8050"
+      - key: HOST
+        value: "0.0.0.0"
+      - key: IQ_ACCOUNT_TYPE
+        value: "PRACTICE"
+    healthCheckPath: /health
+
+databases:
+  - name: finance-db
+    databaseName: finance
+    user: finance_user
+    plan: free

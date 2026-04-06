@@ -4,7 +4,7 @@
 import sys
 from pathlib import Path
 
-ROOT = Path(SPECPATH).resolve()  # finance/
+ROOT = Path(SPECPATH).resolve().parent  # finance/
 
 block_cipher = None
 
@@ -99,7 +99,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon='assets/icon.ico',
+    icon=str(ROOT / "assets" / "icon.ico"),
 )
 
 coll = COLLECT(

@@ -12,6 +12,11 @@ Foco no mercado brasileiro — impostos 2026, Open Banking via Pluggy.
 - Open Banking: Pluggy SDK (Brasil)
 - Python 3.10+
 
+## Agents
+- frontend-dev.md - Para polir a aparencia
+- ux-designer.md - Para adicionar funcionalidades e beleza
+- ia-engineer.md - Para fazer o chatbot 
+
 ## Estrutura de Pastas
 ```
 finance/

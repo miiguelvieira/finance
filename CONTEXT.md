@@ -77,6 +77,16 @@ src/dashboard/pages/overview.py     # NOVO: Visao Geral com 4 KPIs, graficos, al
 desktop/splash.html                  # Splash screen animada (dark navy, spinner CSS)
 desktop/main.py                      # Atualizado: abre splash primeiro, redireciona ao dash
 .github/workflows/ci.yml             # CI/CD: test + build-exe + release no GitHub Actions
+# -- Fase 10 (E2E) --
+tests/test_e2e.py                    # Testes E2E Playwright (5 cenários, rodar com -m e2e)
+requirements.txt                     # Modificado: adicionado playwright + pytest-playwright
+# -- Fase 10 (Auto-update) --
+src/core/updater.py                  # NOVO: auto-update via GitHub Releases (get_current_version, check_for_update, download_and_apply)
+desktop/main.py                      # Atualizado: check_for_update em background thread + aviso 3s na splash
+config.yaml                          # Atualizado: app.version "0.1.0" -> "1.0.0"
+requirements.txt                     # Modificado: adicionado requests + packaging
+tests/test_updater.py                # NOVO: 14/14 PASS (mock GitHub API, sem update, com update, falha de rede)
+README.md                            # NOVO: documentação completa (instalação, stack, impostos BR 2026, testes)
 ```
 
 ## Testes
@@ -94,6 +104,7 @@ desktop/main.py                      # Atualizado: abre splash primeiro, redirec
 | tests/test_dashboard.py | 62/62 PASS |
 | tests/test_desktop.py | 27/27 PASS |
 | tests/test_dashboard.py (Fase 9) | 78/78 PASS |
+| tests/test_updater.py | 14/14 PASS |
 
 ## Schema do Banco
 9 tabelas: accounts, transactions, installments, investments, investment_events,
@@ -108,10 +119,25 @@ goals, balance_history, income_sources, chatbot_history
 - `/pluggy/sync/*` — 3 endpoints (full sync, contas, transações)
 - `/chatbot/` — POST mensagem + GET histórico
 
+# -- Fase 10 (Ícone + Instalador) --
+scripts/generate_icon.py             # NOVO: gera assets/icon.ico (256x256, letra F, fundo #1e293b)
+installer/setup.iss                  # NOVO: script Inno Setup 6+ (lzma2/ultra64, PT-BR, atalho desktop)
+desktop/build.spec                   # Atualizado: icon=None → icon='assets/icon.ico'
+requirements.txt                     # Modificado: adicionado Pillow>=10.0
+
+## Uso
+```bash
+# Gerar ícone:
+python scripts/generate_icon.py
+
+# Gerar instalador (após pyinstaller desktop/build.spec):
+ISCC installer/setup.iss /DAppVersion=1.0.0
+```
+
 ## Próximo Passo
-Fase 10 — Empacotamento final:
-1. `assets/icon.ico` — ícone do executável (design de logo)
-2. Instalador NSIS ou Inno Setup para distribuição simplificada
-3. Auto-update via GitHub Releases (verificar nova versão ao iniciar)
+Fase 10 — Empacotamento final (restante):
+1. ~~`assets/icon.ico`~~ — **concluído**
+2. ~~Instalador Inno Setup~~ — **concluído**
+3. ~~Auto-update via GitHub Releases~~ — **concluído**
 4. Testes E2E com Playwright ou Selenium no dashboard
-5. README.md completo com screenshots e instruções de instalacao
+5. ~~README.md completo com screenshots e instruções de instalacao~~ — **concluído**

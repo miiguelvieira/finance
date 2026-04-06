@@ -31,7 +31,9 @@
       "Bash(pyinstaller desktop/build.spec -y)",
       "Bash(where iscc.exe)",
       "Read(//c/Program Files \\(x86\\)/Inno Setup 6/**)",
-      "Read(//c/Program Files/Inno Setup 6/**)"
+      "Read(//c/Program Files/Inno Setup 6/**)",
+      "Bash(winget list:*)",
+      "Bash(winget upgrade:*)"
     ]
   }
 }

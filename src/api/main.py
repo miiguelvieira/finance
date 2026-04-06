@@ -8,8 +8,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.accounts.router import router as accounts_router
+from src.chatbot.router import router as chatbot_router
 from src.core.config import get_settings
 from src.core.database import setup
+from src.installments.router import income_router, router as installments_router
+from src.investments.router import router as investments_router
+from src.pluggy.router import router as pluggy_router
+from src.projections.router import router as projections_router
 from src.transactions.router import router as transactions_router
 
 
@@ -36,6 +41,12 @@ app.add_middleware(
 
 app.include_router(accounts_router)
 app.include_router(transactions_router)
+app.include_router(installments_router)
+app.include_router(income_router)
+app.include_router(projections_router)
+app.include_router(investments_router)
+app.include_router(pluggy_router)
+app.include_router(chatbot_router)
 
 
 @app.get("/health")

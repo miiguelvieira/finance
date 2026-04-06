@@ -14,9 +14,10 @@ import yaml
 
 
 def _normalize(text: str) -> str:
-    """Lowercase + remove acentos para matching mais robusto."""
+    """Lowercase + remove acentos + remove pontuação para matching robusto."""
     nfkd = unicodedata.normalize("NFKD", text.lower())
-    return "".join(c for c in nfkd if not unicodedata.combining(c))
+    # Remove combining chars (acentos) e mantém apenas alfanuméricos e espaços
+    return "".join(c for c in nfkd if not unicodedata.combining(c) and (c.isalnum() or c.isspace()))
 
 
 def _load_rules(rules_path: str | Path | None = None) -> list[tuple[re.Pattern, str, str]]:

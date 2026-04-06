@@ -65,7 +65,7 @@ FIXTURES = [
 
 for desc, expected in FIXTURES:
     category, _ = cat.classify(desc)
-    report(f"'{desc[:40]}' → {expected}", category == expected, f"got={category}")
+    report(f"'{desc[:40]}' -> {expected}", category == expected, f"got={category}")
 
 
 # ── 2. TransactionService — CRUD ─────────────────────────────────────────────
@@ -80,7 +80,7 @@ today = date.today()
 # Cria transações
 tx1 = tx_svc.create(acc.id, -50.0, "iFood pedido pizza", today)
 tx_svc.db.commit()
-report("create auto-categoriza iFood → alimentacao", tx1.category == "alimentacao", f"cat={tx1.category}")
+report("create auto-categoriza iFood -> alimentacao", tx1.category == "alimentacao", f"cat={tx1.category}")
 
 tx2 = tx_svc.create(acc.id, -120.0, "Conta de luz", today, category="moradia")
 tx_svc.db.commit()
@@ -88,7 +88,7 @@ report("create com categoria explícita", tx2.category == "moradia")
 
 tx3 = tx_svc.create(acc.id, 5000.0, "Salário mês", today)
 tx_svc.db.commit()
-report("create salário → salario", tx3.category == "salario", f"cat={tx3.category}")
+report("create salário -> salario", tx3.category == "salario", f"cat={tx3.category}")
 
 # List filters
 all_txs = tx_svc.list()

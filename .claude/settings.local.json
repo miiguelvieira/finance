@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m pytest tests/test_tax_engine.py tests/test_investments.py -v)",
+      "Bash(python tests/test_tax_engine.py)",
+      "Bash(python tests/test_investments.py)",
+      "Bash(set PYTHONIOENCODING=utf-8)",
+      "Bash(python tests/test_core.py)",
+      "Bash(python tests/test_accounts.py)",
+      "Bash(python tests/test_transactions.py)",
+      "Bash(python tests/test_installments.py)",
+      "Bash(python tests/test_projections.py)",
+      "Bash(python tests/test_pluggy.py)",
+      "Bash(python tests/test_chatbot.py)",
+      "Bash(python -c ':*)",
+      "Bash(python tests/test_dashboard.py)",
+      "Bash(pip install:*)",
+      "Bash(pip show:*)",
+      "Bash(python -c \"import webview; print\\('pywebview ok'\\)\")",
+      "Bash(python -c \"import PyInstaller; print\\('pyinstaller ok'\\)\")",
+      "Bash(python:*)",
+      "Bash(start:*)"
+    ]
+  }
+}

@@ -1,0 +1,82 @@
+intents:
+  saldo:
+    patterns:
+      - saldo
+      - quanto tenho
+      - meu dinheiro
+      - extrato
+      - minha conta
+      - patrimonio
+      - net worth
+
+  gastos:
+    patterns:
+      - gastos
+      - despesas
+      - quanto gastei
+      - onde gastei
+      - categorias
+      - saidas
+      - gasto
+
+  transacoes:
+    patterns:
+      - transacoes
+      - transacoes
+      - ultimas compras
+      - historico
+      - movimentacoes
+      - lancamentos
+      - compras
+
+  investimentos:
+    patterns:
+      - investimentos
+      - carteira
+      - rendimentos
+      - renda fixa
+      - acoes
+      - fii
+      - cdb
+      - tesouro
+      - crypto
+
+  metas:
+    patterns:
+      - metas
+      - objetivos
+      - sonhos
+      - economias
+      - meta
+      - objetivo
+      - poupar
+
+  projecao:
+    patterns:
+      - projecao
+      - previsao
+      - futuro
+      - daqui
+      - proximo mes
+      - tendencia
+      - previsao de saldo
+
+  impostos:
+    patterns:
+      - imposto
+      - ir
+      - tributo
+      - tributacao
+      - declarar
+      - irpf
+      - imposto de renda
+
+  ajuda:
+    patterns:
+      - ajuda
+      - help
+      - comandos
+      - o que voce faz
+      - como usar
+      - menu
+      - opcoes

@@ -1,0 +1,1930 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finance Personal — Dashboard Preview</title>
+  <style>
+    /* ─── CSS Custom Properties ─── */
+    :root {
+      --primary:        #3b82f6;
+      --primary-light:  #eff6ff;
+      --primary-dark:   #2563eb;
+      --success:        #10b981;
+      --success-light:  #ecfdf5;
+      --danger:         #ef4444;
+      --danger-light:   #fef2f2;
+      --warning:        #f59e0b;
+      --warning-light:  #fffbeb;
+      --info:           #6366f1;
+      --info-light:     #eef2ff;
+
+      --sidebar-bg:     #0f172a;
+      --sidebar-grad:   #1e293b;
+      --sidebar-w:      240px;
+      --sidebar-text:   #94a3b8;
+      --sidebar-active: #f8fafc;
+
+      --topbar-h:       48px;
+      --content-bg:     #f1f5f9;
+      --card-bg:        #ffffff;
+      --card-shadow:    0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04);
+      --card-radius:    12px;
+
+      --text-primary:   #0f172a;
+      --text-secondary: #64748b;
+      --text-muted:     #94a3b8;
+      --border-color:   #e2e8f0;
+      --divider:        #1e293b;
+
+      --font: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    /* ─── Reset ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      font-size: 14px;
+      background: var(--content-bg);
+      color: var(--text-primary);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── App Shell ─── */
+    .app-shell {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ─── Sidebar ─── */
+    .sidebar {
+      width: var(--sidebar-w);
+      min-width: var(--sidebar-w);
+      background: linear-gradient(180deg, var(--sidebar-bg) 0%, var(--sidebar-grad) 100%);
+      color: var(--sidebar-text);
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+      border-right: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 8px;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--info) 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: #f8fafc;
+      letter-spacing: -0.3px;
+    }
+
+    .logo-sub {
+      font-size: 10px;
+      color: var(--sidebar-text);
+      margin-top: 1px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .sidebar-section {
+      padding: 0 12px;
+      margin-bottom: 4px;
+    }
+
+    .sidebar-section-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: #475569;
+      padding: 8px 8px 4px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--sidebar-text);
+      margin-bottom: 2px;
+      text-decoration: none;
+    }
+
+    .nav-item:hover {
+      background: rgba(255,255,255,0.06);
+      color: #e2e8f0;
+    }
+
+    .nav-item.active {
+      background: rgba(59,130,246,0.18);
+      color: #93c5fd;
+    }
+
+    .nav-item.active .nav-icon {
+      filter: none;
+    }
+
+    .nav-icon {
+      font-size: 16px;
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      background: var(--primary);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 10px;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 16px 12px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .user-chip:hover { background: rgba(255,255,255,0.06); }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    .user-plan {
+      font-size: 10px;
+      color: var(--sidebar-text);
+    }
+
+    /* ─── Main Area ─── */
+    .main-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    /* ─── Topbar ─── */
+    .topbar {
+      height: var(--topbar-h);
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      gap: 8px;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .breadcrumb-sep { color: var(--text-muted); }
+
+    .breadcrumb-current {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .topbar-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .topbar-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--content-bg);
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 15px;
+      color: var(--text-secondary);
+      transition: background 0.15s;
+    }
+
+    .topbar-btn:hover { background: var(--border-color); }
+
+    .notif-dot {
+      position: relative;
+    }
+
+    .notif-dot::after {
+      content: '';
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 6px;
+      height: 6px;
+      background: var(--danger);
+      border-radius: 50%;
+      border: 1px solid #fff;
+    }
+
+    .topbar-date {
+      font-size: 12px;
+      color: var(--text-muted);
+      background: var(--content-bg);
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+    }
+
+    /* ─── Content ─── */
+    .content {
+      flex: 1;
+      padding: 0;
+    }
+
+    /* ─── Page Divider ─── */
+    .page-divider {
+      background: var(--sidebar-bg);
+      color: #475569;
+      padding: 10px 28px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .page-divider span {
+      color: #64748b;
+    }
+
+    .page-divider code {
+      color: #3b82f6;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 10px;
+      background: rgba(59,130,246,0.12);
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 0;
+      font-weight: 400;
+    }
+
+    .page-divider::before {
+      content: '';
+      width: 3px;
+      height: 14px;
+      background: var(--primary);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* ─── Page Section ─── */
+    .page-section {
+      padding: 24px 28px 32px;
+    }
+
+    /* ─── Cards ─── */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--card-radius);
+      box-shadow: var(--card-shadow);
+      border: 1px solid rgba(226,232,240,0.8);
+    }
+
+    .card-header {
+      padding: 16px 20px 12px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .card-subtitle {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .card-action {
+      font-size: 12px;
+      color: var(--primary);
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .card-body {
+      padding: 16px 20px;
+    }
+
+    /* ─── Grid ─── */
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+
+    /* ─── KPI Cards ─── */
+    .kpi-card {
+      padding: 20px;
+    }
+
+    .kpi-icon-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .kpi-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .kpi-icon.blue { background: var(--primary-light); }
+    .kpi-icon.green { background: var(--success-light); }
+    .kpi-icon.red { background: var(--danger-light); }
+    .kpi-icon.amber { background: var(--warning-light); }
+
+    .kpi-trend {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 7px;
+      border-radius: 20px;
+    }
+
+    .kpi-trend.up { background: var(--success-light); color: var(--success); }
+    .kpi-trend.down-good { background: var(--success-light); color: var(--success); }
+    .kpi-trend.down-bad { background: var(--danger-light); color: var(--danger); }
+    .kpi-trend.neutral { background: var(--primary-light); color: var(--primary); }
+
+    .kpi-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .kpi-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.5px;
+    }
+
+    /* ─── Welcome Banner ─── */
+    .welcome-banner {
+      background: linear-gradient(135deg, #1e3a5f 0%, #1e40af 50%, #312e81 100%);
+      border-radius: var(--card-radius);
+      padding: 24px 28px;
+      color: #fff;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .welcome-banner::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 200px;
+      height: 200px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+    }
+
+    .welcome-banner::after {
+      content: '';
+      position: absolute;
+      bottom: -60px;
+      right: 80px;
+      width: 150px;
+      height: 150px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 50%;
+    }
+
+    .welcome-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      letter-spacing: -0.3px;
+    }
+
+    .welcome-sub {
+      font-size: 13px;
+      color: rgba(255,255,255,0.65);
+    }
+
+    .welcome-cta {
+      margin-top: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .welcome-cta:hover { background: rgba(255,255,255,0.2); }
+
+    /* ─── Section headings ─── */
+    .section-heading {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-heading::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-color);
+    }
+
+    /* ─── SVG Charts ─── */
+    .chart-wrap {
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .chart-label-x {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0 0;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    /* ─── Donut Legend ─── */
+    .donut-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    .legend-label { color: var(--text-secondary); flex: 1; }
+    .legend-val {
+      font-weight: 600;
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ─── Insight Cards ─── */
+    .insight-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: #fff;
+    }
+
+    .insight-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+
+    .insight-dot.green { background: var(--success); box-shadow: 0 0 0 3px var(--success-light); }
+    .insight-dot.yellow { background: var(--warning); box-shadow: 0 0 0 3px var(--warning-light); }
+    .insight-dot.blue { background: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+
+    .insight-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .insight-text strong { color: var(--text-primary); font-weight: 600; }
+
+    /* ─── Tables ─── */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .data-table th {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: var(--content-bg);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .data-table td {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      vertical-align: middle;
+    }
+
+    .data-table tr:last-child td { border-bottom: none; }
+
+    .data-table tr:hover td { background: #f8fafc; }
+
+    .data-table td.primary-col {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .data-table td.mono {
+      font-variant-numeric: tabular-nums;
+      font-weight: 500;
+    }
+
+    .data-table td.positive { color: var(--success); font-weight: 600; }
+    .data-table td.negative { color: var(--danger); font-weight: 600; }
+
+    /* table with left-border category colors */
+    .data-table tr.row-income td:first-child {
+      border-left: 3px solid var(--success);
+      padding-left: 11px;
+    }
+
+    .data-table tr.row-expense td:first-child {
+      border-left: 3px solid var(--danger);
+      padding-left: 11px;
+    }
+
+    /* ─── Badges ─── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+
+    .badge.green { background: var(--success-light); color: var(--success); }
+    .badge.red { background: var(--danger-light); color: var(--danger); }
+    .badge.blue { background: var(--primary-light); color: var(--primary); }
+    .badge.amber { background: var(--warning-light); color: #b45309; }
+    .badge.gray { background: #f1f5f9; color: #475569; }
+    .badge.purple { background: #ede9fe; color: #7c3aed; }
+    .badge.indigo { background: var(--info-light); color: var(--info); }
+
+    /* ─── Filter Bar ─── */
+    .filter-bar {
+      background: #fff;
+      border-radius: var(--card-radius);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--card-shadow);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .filter-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .filter-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+      background: var(--content-bg);
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: all 0.15s;
+    }
+
+    .filter-chip:hover { border-color: var(--primary); color: var(--primary); }
+    .filter-chip.active { background: var(--primary-light); border-color: var(--primary); color: var(--primary); font-weight: 600; }
+
+    .filter-input {
+      border: 1px solid var(--border-color);
+      border-radius: 7px;
+      padding: 5px 10px;
+      font-size: 12px;
+      color: var(--text-primary);
+      background: var(--content-bg);
+      outline: none;
+      font-family: var(--font);
+    }
+
+    .filter-input:focus { border-color: var(--primary); }
+
+    .filter-sep {
+      width: 1px;
+      height: 20px;
+      background: var(--border-color);
+    }
+
+    /* ─── Investment Cards ─── */
+    .inv-card {
+      padding: 16px;
+    }
+
+    .inv-card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .inv-type-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    .inv-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .inv-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .inv-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.3px;
+    }
+
+    .inv-gain {
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .inv-gain.up { color: var(--success); }
+    .inv-gain.down { color: var(--danger); }
+
+    /* ─── Mini Progress Bar ─── */
+    .mini-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mini-bar-track {
+      flex: 1;
+      height: 5px;
+      background: var(--border-color);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .mini-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+    }
+
+    .mini-bar-pct {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-variant-numeric: tabular-nums;
+      min-width: 32px;
+      text-align: right;
+    }
+
+    /* ─── Goal Cards ─── */
+    .goal-card {
+      padding: 18px;
+    }
+
+    .goal-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .goal-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .goal-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .goal-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .goal-amounts {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+
+    .goal-current { font-weight: 700; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+    .goal-target { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+
+    .goal-bar-track {
+      height: 8px;
+      background: var(--border-color);
+      border-radius: 99px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .goal-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--primary) 0%, #06b6d4 100%);
+    }
+
+    .goal-bar-fill.done {
+      background: linear-gradient(90deg, var(--success) 0%, #34d399 100%);
+    }
+
+    .goal-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+    }
+
+    .goal-pct { font-weight: 700; color: var(--primary); }
+    .goal-pct.done { color: var(--success); }
+
+    .goal-deadline { color: var(--text-muted); }
+
+    /* ─── Chat ─── */
+    .chat-window {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .chat-msg {
+      display: flex;
+      gap: 8px;
+      max-width: 80%;
+    }
+
+    .chat-msg.bot { align-self: flex-start; }
+    .chat-msg.user { align-self: flex-end; flex-direction: row-reverse; }
+
+    .chat-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .chat-avatar.bot-av { background: var(--primary-light); }
+    .chat-avatar.user-av {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: #fff;
+      font-weight: 700;
+      font-size: 11px;
+    }
+
+    .chat-bubble {
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .chat-bubble.bot-bubble {
+      background: #fff;
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      border-bottom-left-radius: 4px;
+    }
+
+    .chat-bubble.user-bubble {
+      background: var(--primary);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+
+    .chat-time {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      display: block;
+    }
+
+    .chat-time.user-time { text-align: right; color: rgba(255,255,255,0.6); }
+
+    .chat-input-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .chat-input {
+      flex: 1;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: 13px;
+      background: #fff;
+      outline: none;
+      font-family: var(--font);
+      color: var(--text-primary);
+    }
+
+    .chat-input:focus { border-color: var(--primary); }
+
+    .chat-send {
+      width: 36px;
+      height: 36px;
+      background: var(--primary);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .intent-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    /* ─── Account balance visual ─── */
+    .account-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .account-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .stat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+      background: var(--content-bg);
+      color: var(--text-secondary);
+    }
+
+    /* ─── Spacing helpers ─── */
+    .mb-4 { margin-bottom: 4px; }
+    .mb-8 { margin-bottom: 8px; }
+    .mb-12 { margin-bottom: 12px; }
+    .mb-16 { margin-bottom: 16px; }
+    .mb-20 { margin-bottom: 20px; }
+    .mt-4  { margin-top: 4px; }
+    .mt-8  { margin-top: 8px; }
+    .mt-12 { margin-top: 12px; }
+    .mt-16 { margin-top: 16px; }
+
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .items-center { align-items: center; }
+    .justify-between { justify-content: space-between; }
+    .gap-8 { gap: 8px; }
+    .gap-12 { gap: 12px; }
+    .gap-16 { gap: 16px; }
+
+    .text-sm { font-size: 12px; }
+    .text-xs { font-size: 11px; }
+    .text-muted { color: var(--text-muted); }
+    .text-secondary { color: var(--text-secondary); }
+    .font-bold { font-weight: 700; }
+    .font-semibold { font-weight: 600; }
+    .tabular { font-variant-numeric: tabular-nums; }
+
+    /* ─── SVG line chart grid ─── */
+    .chart-container {
+      position: relative;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ════ SIDEBAR ════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">💰</div>
+      <div>
+        <div class="logo-text">Finance Personal</div>
+        <div class="logo-sub">Gestão Financeira</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Menu</div>
+      <a class="nav-item active" href="#visao-geral">
+        <span class="nav-icon">🏠</span> Visão Geral
+      </a>
+      <a class="nav-item" href="#contas">
+        <span class="nav-icon">🏦</span> Contas
+      </a>
+      <a class="nav-item" href="#transacoes">
+        <span class="nav-icon">💳</span> Transações
+      </a>
+      <a class="nav-item" href="#investimentos">
+        <span class="nav-icon">📈</span> Investimentos
+      </a>
+      <a class="nav-item" href="#metas">
+        <span class="nav-icon">🎯</span> Metas
+        <span class="nav-badge">3</span>
+      </a>
+      <a class="nav-item" href="#chatbot">
+        <span class="nav-icon">🤖</span> Chatbot
+      </a>
+    </div>
+
+    <div class="sidebar-section" style="margin-top: 16px;">
+      <div class="sidebar-section-label">Outros</div>
+      <a class="nav-item" href="#">
+        <span class="nav-icon">⚙️</span> Configurações
+      </a>
+      <a class="nav-item" href="#">
+        <span class="nav-icon">📊</span> Relatórios
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="user-avatar">M</div>
+        <div>
+          <div class="user-name">Miguel</div>
+          <div class="user-plan">Plano Pro</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ════ MAIN ════ -->
+  <div class="main-area">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="breadcrumb">
+        <span>Finance</span>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-current">Visão Geral</span>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-date">Abril 2026</div>
+        <div class="topbar-btn notif-dot">🔔</div>
+        <div class="topbar-btn">🔍</div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ════════════════════════════════ PAGE 0 — VISÃO GERAL ════ -->
+      <div class="page-divider" id="visao-geral">
+        <span>Visão Geral</span>
+        <code>/ visão-geral</code>
+      </div>
+
+      <div class="page-section">
+
+        <!-- Welcome Banner -->
+        <div class="welcome-banner mb-20">
+          <div class="welcome-title">Bom dia, Miguel 👋</div>
+          <div class="welcome-sub">Aqui está seu resumo financeiro — Domingo, 6 de Abril de 2026</div>
+          <div class="welcome-cta">📥 Sincronizar contas &nbsp;→</div>
+        </div>
+
+        <!-- KPI Row -->
+        <div class="grid-4 mb-20">
+          <!-- Patrimônio Total -->
+          <div class="card kpi-card">
+            <div class="kpi-icon-row">
+              <div class="kpi-icon blue">💎</div>
+              <div class="kpi-trend up">↑ +2.4%</div>
+            </div>
+            <div class="kpi-label">Patrimônio Total</div>
+            <div class="kpi-value">R$ 87.340</div>
+            <div class="text-xs text-muted mt-4">este mês</div>
+          </div>
+
+          <!-- Receitas -->
+          <div class="card kpi-card">
+            <div class="kpi-icon-row">
+              <div class="kpi-icon green">💵</div>
+              <div class="kpi-trend up">↑ +8%</div>
+            </div>
+            <div class="kpi-label">Receitas (Abril)</div>
+            <div class="kpi-value">R$ 12.500</div>
+            <div class="text-xs text-muted mt-4">vs março</div>
+          </div>
+
+          <!-- Despesas -->
+          <div class="card kpi-card">
+            <div class="kpi-icon-row">
+              <div class="kpi-icon red">🧾</div>
+              <div class="kpi-trend down-good">↓ -3%</div>
+            </div>
+            <div class="kpi-label">Despesas (Abril)</div>
+            <div class="kpi-value">R$ 4.820</div>
+            <div class="text-xs text-muted mt-4">vs março</div>
+          </div>
+
+          <!-- Rendimento -->
+          <div class="card kpi-card">
+            <div class="kpi-icon-row">
+              <div class="kpi-icon amber">📈</div>
+              <div class="kpi-trend neutral">+1.4% a.m.</div>
+            </div>
+            <div class="kpi-label">Rendimento (carteira)</div>
+            <div class="kpi-value">R$ 1.240</div>
+            <div class="text-xs text-muted mt-4">no mês</div>
+          </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="grid-2-1 mb-20">
+
+          <!-- Line Chart -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Evolução do Patrimônio</div>
+                <div class="card-subtitle">Últimos 6 meses</div>
+              </div>
+              <div class="stat-pill">📅 Jan – Jun</div>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <svg width="100%" viewBox="0 0 460 140" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.18"/>
+                      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
+                    </linearGradient>
+                  </defs>
+                  <!-- Grid lines -->
+                  <line x1="0" y1="20" x2="460" y2="20" stroke="#e2e8f0" stroke-width="1"/>
+                  <line x1="0" y1="50" x2="460" y2="50" stroke="#e2e8f0" stroke-width="1"/>
+                  <line x1="0" y1="80" x2="460" y2="80" stroke="#e2e8f0" stroke-width="1"/>
+                  <line x1="0" y1="110" x2="460" y2="110" stroke="#e2e8f0" stroke-width="1"/>
+                  <!-- Y labels -->
+                  <text x="0" y="17" font-size="9" fill="#94a3b8">100k</text>
+                  <text x="0" y="47" font-size="9" fill="#94a3b8">85k</text>
+                  <text x="0" y="77" font-size="9" fill="#94a3b8">70k</text>
+                  <text x="0" y="107" font-size="9" fill="#94a3b8">55k</text>
+                  <!-- Area fill -->
+                  <path d="M30,105 C80,100 130,92 180,80 C230,68 280,58 330,42 C365,30 400,24 440,18 L440,130 L30,130 Z"
+                        fill="url(#lineGrad)"/>
+                  <!-- Line -->
+                  <path d="M30,105 C80,100 130,92 180,80 C230,68 280,58 330,42 C365,30 400,24 440,18"
+                        fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <!-- Dots -->
+                  <circle cx="30"  cy="105" r="4" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
+                  <circle cx="120" cy="92"  r="4" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
+                  <circle cx="210" cy="78"  r="4" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
+                  <circle cx="300" cy="52"  r="4" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
+                  <circle cx="380" cy="30"  r="4" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
+                  <circle cx="440" cy="18"  r="5" fill="#3b82f6" stroke="#fff" stroke-width="2"/>
+                  <!-- Tooltip on last point -->
+                  <rect x="400" y="2" width="58" height="16" rx="4" fill="#0f172a"/>
+                  <text x="429" y="13" font-size="9" fill="#fff" text-anchor="middle" font-weight="600">R$ 87.340</text>
+                </svg>
+              </div>
+              <div class="chart-label-x" style="padding: 0 10px;">
+                <span>Jan</span><span>Fev</span><span>Mar</span><span>Abr</span><span>Mai</span><span>Jun</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Donut -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Distribuição de Ativos</div>
+                <div class="card-subtitle">Por classe</div>
+              </div>
+            </div>
+            <div class="card-body" style="display:flex;flex-direction:column;align-items:center;">
+              <svg width="130" height="130" viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg">
+                <!-- Donut segments: cx=65, cy=65, r=48, innerR=30 -->
+                <!-- Renda Fixa 45% = 162deg -->
+                <circle cx="65" cy="65" r="48" fill="none" stroke="#3b82f6" stroke-width="18"
+                        stroke-dasharray="135.7 301.6" stroke-dashoffset="0" transform="rotate(-90 65 65)"/>
+                <!-- Ações 30% = 108deg -->
+                <circle cx="65" cy="65" r="48" fill="none" stroke="#10b981" stroke-width="18"
+                        stroke-dasharray="90.5 346.8" stroke-dashoffset="-135.7" transform="rotate(-90 65 65)"/>
+                <!-- FII 15% = 54deg -->
+                <circle cx="65" cy="65" r="48" fill="none" stroke="#f59e0b" stroke-width="18"
+                        stroke-dasharray="45.2 392.1" stroke-dashoffset="-226.2" transform="rotate(-90 65 65)"/>
+                <!-- Crypto 10% = 36deg -->
+                <circle cx="65" cy="65" r="48" fill="none" stroke="#8b5cf6" stroke-width="18"
+                        stroke-dasharray="30.2 407.1" stroke-dashoffset="-271.4" transform="rotate(-90 65 65)"/>
+                <!-- Inner circle white -->
+                <circle cx="65" cy="65" r="30" fill="white"/>
+                <text x="65" y="61" text-anchor="middle" font-size="10" font-weight="700" fill="#0f172a">Total</text>
+                <text x="65" y="74" text-anchor="middle" font-size="9" fill="#64748b">R$ 87.340</text>
+              </svg>
+              <div class="donut-legend" style="width:100%;">
+                <div class="legend-item">
+                  <div class="legend-dot" style="background:#3b82f6;"></div>
+                  <span class="legend-label">Renda Fixa</span>
+                  <span class="legend-val">45%</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-dot" style="background:#10b981;"></div>
+                  <span class="legend-label">Ações</span>
+                  <span class="legend-val">30%</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-dot" style="background:#f59e0b;"></div>
+                  <span class="legend-label">FII</span>
+                  <span class="legend-val">15%</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-dot" style="background:#8b5cf6;"></div>
+                  <span class="legend-label">Crypto</span>
+                  <span class="legend-val">10%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Insights Row -->
+        <div class="section-heading mb-12">Alertas &amp; Insights</div>
+        <div class="grid-3">
+          <div class="insight-card">
+            <div class="insight-dot green"></div>
+            <div class="insight-text"><strong>Mês positivo:</strong> receitas 2.6× maiores que despesas. Saldo livre de R$ 7.680 disponível.</div>
+          </div>
+          <div class="insight-card">
+            <div class="insight-dot yellow"></div>
+            <div class="insight-text"><strong>Meta "Viagem Europa"</strong> está 68% concluída — faltam R$ 3.520 para atingir o objetivo.</div>
+          </div>
+          <div class="insight-card">
+            <div class="insight-dot blue"></div>
+            <div class="insight-text"><strong>CDB vence em 15 dias</strong> — considere reinvestir R$ 5.000 em LCI para isenção de IR.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════ PAGE 1 — CONTAS ════ -->
+      <div class="page-divider" id="contas">
+        <span>Contas</span>
+        <code>/contas</code>
+      </div>
+
+      <div class="page-section">
+        <div class="grid-2-1 mb-20">
+
+          <!-- Accounts Table -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Minhas Contas</div>
+                <div class="card-subtitle">4 contas vinculadas</div>
+              </div>
+              <div class="card-action">+ Nova conta</div>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Conta</th>
+                  <th>Tipo</th>
+                  <th>Banco</th>
+                  <th style="text-align:right">Saldo</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="account-row"><div class="account-icon" style="background:#eff6ff;font-size:16px;">🏦</div><div class="primary-col" style="font-weight:600;color:#0f172a;">Conta Corrente</div></div></td>
+                  <td><span class="badge gray">Corrente</span></td>
+                  <td class="text-secondary">Nubank</td>
+                  <td class="mono positive" style="text-align:right">R$ 8.420,00</td>
+                  <td><span class="badge green">● Ativa</span></td>
+                </tr>
+                <tr>
+                  <td><div class="account-row"><div class="account-icon" style="background:#f0fdf4;font-size:16px;">💰</div><div class="primary-col" style="font-weight:600;color:#0f172a;">Poupança</div></div></td>
+                  <td><span class="badge blue">Poupança</span></td>
+                  <td class="text-secondary">Itaú</td>
+                  <td class="mono positive" style="text-align:right">R$ 12.800,00</td>
+                  <td><span class="badge green">● Ativa</span></td>
+                </tr>
+                <tr>
+                  <td><div class="account-row"><div class="account-icon" style="background:#fffbeb;font-size:16px;">💳</div><div class="primary-col" style="font-weight:600;color:#0f172a;">Cartão de Crédito</div></div></td>
+                  <td><span class="badge amber">Crédito</span></td>
+                  <td class="text-secondary">XP Investimentos</td>
+                  <td class="mono negative" style="text-align:right">-R$ 2.340,00</td>
+                  <td><span class="badge green">● Ativa</span></td>
+                </tr>
+                <tr>
+                  <td><div class="account-row"><div class="account-icon" style="background:#fef2f2;font-size:16px;">🏠</div><div class="primary-col" style="font-weight:600;color:#0f172a;">Financiamento</div></div></td>
+                  <td><span class="badge red">Dívida</span></td>
+                  <td class="text-secondary">CEF</td>
+                  <td class="mono negative" style="text-align:right">-R$ 145.000,00</td>
+                  <td><span class="badge green">● Em dia</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Balance Donut -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Distribuição de Saldo</div>
+                <div class="card-subtitle">Contas positivas</div>
+              </div>
+            </div>
+            <div class="card-body" style="display:flex;flex-direction:column;align-items:center;">
+              <svg width="140" height="140" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+                <!-- Corrente ~39% -->
+                <circle cx="70" cy="70" r="52" fill="none" stroke="#3b82f6" stroke-width="20"
+                        stroke-dasharray="127.2 326.7" stroke-dashoffset="0" transform="rotate(-90 70 70)"/>
+                <!-- Poupança ~59% -->
+                <circle cx="70" cy="70" r="52" fill="none" stroke="#10b981" stroke-width="20"
+                        stroke-dasharray="192.2 261.7" stroke-dashoffset="-127.2" transform="rotate(-90 70 70)"/>
+                <!-- Outros ~2% -->
+                <circle cx="70" cy="70" r="52" fill="none" stroke="#e2e8f0" stroke-width="20"
+                        stroke-dasharray="7.2 446.7" stroke-dashoffset="-319.4" transform="rotate(-90 70 70)"/>
+                <circle cx="70" cy="70" r="32" fill="white"/>
+                <text x="70" y="66" text-anchor="middle" font-size="10" font-weight="700" fill="#0f172a">Líquido</text>
+                <text x="70" y="79" text-anchor="middle" font-size="9" fill="#64748b">R$ 21.220</text>
+              </svg>
+              <div class="donut-legend" style="width:100%;margin-top:8px;">
+                <div class="legend-item">
+                  <div class="legend-dot" style="background:#3b82f6;border-radius:50%;"></div>
+                  <span class="legend-label">Conta Corrente</span>
+                  <span class="legend-val tabular">R$ 8.420</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-dot" style="background:#10b981;border-radius:50%;"></div>
+                  <span class="legend-label">Poupança</span>
+                  <span class="legend-val tabular">R$ 12.800</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-dot" style="background:#e2e8f0;border-radius:50%;"></div>
+                  <span class="legend-label">Outros</span>
+                  <span class="legend-val tabular">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════ PAGE 2 — TRANSAÇÕES ════ -->
+      <div class="page-divider" id="transacoes">
+        <span>Transações</span>
+        <code>/transacoes</code>
+      </div>
+
+      <div class="page-section">
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+          <span class="filter-label">Filtrar:</span>
+          <div class="filter-chip active">📅 Abril 2026</div>
+          <div class="filter-chip">Todos os tipos</div>
+          <div class="filter-sep"></div>
+          <div class="filter-chip">🏦 Todas as contas</div>
+          <div class="filter-sep"></div>
+          <input class="filter-input" type="text" placeholder="🔍 Buscar transação..." style="width:180px;"/>
+          <div style="margin-left:auto;">
+            <div class="filter-chip">+ Nova transação</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Extrato de Abril</div>
+              <div class="card-subtitle">12 transações · Saldo do período: <span style="color:var(--success);font-weight:600;">+R$ 7.680,00</span></div>
+            </div>
+            <div class="card-action">Exportar CSV</div>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Descrição</th>
+                <th>Data</th>
+                <th>Categoria</th>
+                <th>Conta</th>
+                <th style="text-align:right">Valor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="row-income">
+                <td class="primary-col">Salário — Empresa XYZ</td>
+                <td class="text-secondary">01/04/2026</td>
+                <td><span class="badge green">💼 salário</span></td>
+                <td class="text-secondary">Nubank</td>
+                <td class="mono positive" style="text-align:right">+R$ 9.500,00</td>
+              </tr>
+              <tr class="row-income">
+                <td class="primary-col">Freelance — Projeto Web</td>
+                <td class="text-secondary">03/04/2026</td>
+                <td><span class="badge blue">💻 freelance</span></td>
+                <td class="text-secondary">Nubank</td>
+                <td class="mono positive" style="text-align:right">+R$ 3.000,00</td>
+              </tr>
+              <tr class="row-expense">
+                <td class="primary-col">Aluguel</td>
+                <td class="text-secondary">05/04/2026</td>
+                <td><span class="badge amber">🏠 moradia</span></td>
+                <td class="text-secondary">Itaú</td>
+                <td class="mono negative" style="text-align:right">-R$ 1.800,00</td>
+              </tr>
+              <tr class="row-expense">
+                <td class="primary-col">Mercado Extra</td>
+                <td class="text-secondary">06/04/2026</td>
+                <td><span class="badge purple">🍎 alimentação</span></td>
+                <td class="text-secondary">Nubank</td>
+                <td class="mono negative" style="text-align:right">-R$ 420,00</td>
+              </tr>
+              <tr class="row-income">
+                <td class="primary-col">Dividendos FII XPLG11</td>
+                <td class="text-secondary">07/04/2026</td>
+                <td><span class="badge green">📊 dividendos</span></td>
+                <td class="text-secondary">XP</td>
+                <td class="mono positive" style="text-align:right">+R$ 320,00</td>
+              </tr>
+              <tr class="row-expense">
+                <td class="primary-col">Netflix + Spotify</td>
+                <td class="text-secondary">08/04/2026</td>
+                <td><span class="badge indigo">📱 assinaturas</span></td>
+                <td class="text-secondary">Nubank</td>
+                <td class="mono negative" style="text-align:right">-R$ 89,90</td>
+              </tr>
+              <tr class="row-expense">
+                <td class="primary-col">Uber</td>
+                <td class="text-secondary">09/04/2026</td>
+                <td><span class="badge gray">🚗 transporte</span></td>
+                <td class="text-secondary">Nubank</td>
+                <td class="mono negative" style="text-align:right">-R$ 45,00</td>
+              </tr>
+              <tr class="row-expense">
+                <td class="primary-col">Academia Smart Fit</td>
+                <td class="text-secondary">10/04/2026</td>
+                <td><span class="badge red">💪 saúde</span></td>
+                <td class="text-secondary">Nubank</td>
+                <td class="mono negative" style="text-align:right">-R$ 99,90</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════ PAGE 3 — INVESTIMENTOS ════ -->
+      <div class="page-divider" id="investimentos">
+        <span>Investimentos</span>
+        <code>/investimentos</code>
+      </div>
+
+      <div class="page-section">
+
+        <!-- Summary Cards -->
+        <div class="grid-4 mb-20">
+          <div class="card inv-card">
+            <div class="inv-card-header">
+              <div class="inv-type-dot" style="background:#3b82f6;"></div>
+              <div>
+                <div class="inv-name">Renda Fixa</div>
+                <div class="inv-sub">CDB · LCI · Tesouro</div>
+              </div>
+            </div>
+            <div class="inv-value">R$ 39.300</div>
+            <div class="inv-gain up">↑ +8,2% a.a.</div>
+          </div>
+          <div class="card inv-card">
+            <div class="inv-card-header">
+              <div class="inv-type-dot" style="background:#10b981;"></div>
+              <div>
+                <div class="inv-name">Ações</div>
+                <div class="inv-sub">B3 · ETF</div>
+              </div>
+            </div>
+            <div class="inv-value">R$ 26.200</div>
+            <div class="inv-gain up">↑ +12.4% a.a.</div>
+          </div>
+          <div class="card inv-card">
+            <div class="inv-card-header">
+              <div class="inv-type-dot" style="background:#f59e0b;"></div>
+              <div>
+                <div class="inv-name">FIIs</div>
+                <div class="inv-sub">Fundos Imobiliários</div>
+              </div>
+            </div>
+            <div class="inv-value">R$ 13.090</div>
+            <div class="inv-gain up">↑ +9.1% a.a.</div>
+          </div>
+          <div class="card inv-card">
+            <div class="inv-card-header">
+              <div class="inv-type-dot" style="background:#8b5cf6;"></div>
+              <div>
+                <div class="inv-name">Crypto</div>
+                <div class="inv-sub">BTC · ETH</div>
+              </div>
+            </div>
+            <div class="inv-value">R$ 8.750</div>
+            <div class="inv-gain down">↓ -4.2% (30d)</div>
+          </div>
+        </div>
+
+        <!-- Portfolio Table -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Posições Abertas</div>
+              <div class="card-subtitle">Atualizado em 06/04/2026 às 18:30</div>
+            </div>
+            <div class="card-action">+ Novo aporte</div>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Ativo</th>
+                <th>Tipo</th>
+                <th>Valor Investido</th>
+                <th>Valor Atual</th>
+                <th>Rendimento</th>
+                <th>% Portfólio</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="primary-col">CDB Nubank 108% CDI</td>
+                <td><span class="badge blue">Renda Fixa</span></td>
+                <td class="mono">R$ 15.000,00</td>
+                <td class="mono">R$ 16.230,00</td>
+                <td class="mono positive">+8.2% ↑</td>
+                <td>
+                  <div class="mini-bar-wrap">
+                    <div class="mini-bar-track"><div class="mini-bar-fill" style="width:18.6%;background:#3b82f6;"></div></div>
+                    <div class="mini-bar-pct">18.6%</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="primary-col">Tesouro IPCA+ 2029</td>
+                <td><span class="badge blue">Renda Fixa</span></td>
+                <td class="mono">R$ 10.000,00</td>
+                <td class="mono">R$ 10.850,00</td>
+                <td class="mono positive">+8.5% ↑</td>
+                <td>
+                  <div class="mini-bar-wrap">
+                    <div class="mini-bar-track"><div class="mini-bar-fill" style="width:12.4%;background:#3b82f6;"></div></div>
+                    <div class="mini-bar-pct">12.4%</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="primary-col">BOVA11 — ETF Ibovespa</td>
+                <td><span class="badge green">Ações</span></td>
+                <td class="mono">R$ 18.000,00</td>
+                <td class="mono">R$ 20.400,00</td>
+                <td class="mono positive">+13.3% ↑</td>
+                <td>
+                  <div class="mini-bar-wrap">
+                    <div class="mini-bar-track"><div class="mini-bar-fill" style="width:23.4%;background:#10b981;"></div></div>
+                    <div class="mini-bar-pct">23.4%</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="primary-col">XPLG11 — FII Logística</td>
+                <td><span class="badge amber">FII</span></td>
+                <td class="mono">R$ 12.000,00</td>
+                <td class="mono">R$ 13.090,00</td>
+                <td class="mono positive">+9.1% ↑</td>
+                <td>
+                  <div class="mini-bar-wrap">
+                    <div class="mini-bar-track"><div class="mini-bar-fill" style="width:15%;background:#f59e0b;"></div></div>
+                    <div class="mini-bar-pct">15.0%</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="primary-col">Bitcoin (BTC)</td>
+                <td><span class="badge purple">Crypto</span></td>
+                <td class="mono">R$ 9.100,00</td>
+                <td class="mono">R$ 8.750,00</td>
+                <td class="mono negative">-3.8% ↓</td>
+                <td>
+                  <div class="mini-bar-wrap">
+                    <div class="mini-bar-track"><div class="mini-bar-fill" style="width:10%;background:#8b5cf6;"></div></div>
+                    <div class="mini-bar-pct">10.0%</div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════ PAGE 4 — METAS ════ -->
+      <div class="page-divider" id="metas">
+        <span>Metas</span>
+        <code>/metas</code>
+      </div>
+
+      <div class="page-section">
+        <div class="flex items-center justify-between mb-16">
+          <div class="section-heading" style="flex:1;margin-bottom:0;">Suas metas financeiras</div>
+          <div class="filter-chip" style="flex-shrink:0;">+ Nova meta</div>
+        </div>
+
+        <div class="grid-3 mb-20">
+          <!-- Meta 1 -->
+          <div class="card goal-card">
+            <div class="goal-header">
+              <div class="goal-icon" style="background:#eff6ff;">✈️</div>
+              <div>
+                <div class="goal-name">Viagem Europa</div>
+                <div class="goal-sub">Vence em Dez/2026</div>
+              </div>
+              <span class="badge blue" style="margin-left:auto;height:fit-content;">Em progresso</span>
+            </div>
+            <div class="goal-amounts">
+              <span class="goal-current">R$ 7.480,00</span>
+              <span class="goal-target">de R$ 11.000,00</span>
+            </div>
+            <div class="goal-bar-track">
+              <div class="goal-bar-fill" style="width:68%;"></div>
+            </div>
+            <div class="goal-meta">
+              <span class="goal-pct">68% concluído</span>
+              <span class="goal-deadline">Faltam R$ 3.520</span>
+            </div>
+          </div>
+
+          <!-- Meta 2 -->
+          <div class="card goal-card">
+            <div class="goal-header">
+              <div class="goal-icon" style="background:#ecfdf5;">🚗</div>
+              <div>
+                <div class="goal-name">Carro Novo</div>
+                <div class="goal-sub">Vence em Jun/2027</div>
+              </div>
+              <span class="badge amber" style="margin-left:auto;height:fit-content;">Em progresso</span>
+            </div>
+            <div class="goal-amounts">
+              <span class="goal-current">R$ 18.000,00</span>
+              <span class="goal-target">de R$ 60.000,00</span>
+            </div>
+            <div class="goal-bar-track">
+              <div class="goal-bar-fill" style="width:30%;"></div>
+            </div>
+            <div class="goal-meta">
+              <span class="goal-pct">30% concluído</span>
+              <span class="goal-deadline">Faltam R$ 42.000</span>
+            </div>
+          </div>
+
+          <!-- Meta 3 — Concluída -->
+          <div class="card goal-card">
+            <div class="goal-header">
+              <div class="goal-icon" style="background:#ecfdf5;">🏥</div>
+              <div>
+                <div class="goal-name">Reserva de Emergência</div>
+                <div class="goal-sub">Concluída em Mar/2026</div>
+              </div>
+              <span class="badge green" style="margin-left:auto;height:fit-content;">✓ Concluída</span>
+            </div>
+            <div class="goal-amounts">
+              <span class="goal-current">R$ 30.000,00</span>
+              <span class="goal-target">de R$ 30.000,00</span>
+            </div>
+            <div class="goal-bar-track">
+              <div class="goal-bar-fill done" style="width:100%;"></div>
+            </div>
+            <div class="goal-meta">
+              <span class="goal-pct done">100% ✓</span>
+              <span class="goal-deadline" style="color:var(--success);">Meta atingida!</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Goals summary stats -->
+        <div class="card">
+          <div class="card-body" style="display:flex;gap:32px;align-items:center;">
+            <div style="text-align:center;">
+              <div style="font-size:28px;font-weight:800;color:var(--primary);font-variant-numeric:tabular-nums;">3</div>
+              <div class="text-xs text-muted mt-4">Metas ativas</div>
+            </div>
+            <div style="width:1px;height:40px;background:var(--border-color);"></div>
+            <div style="text-align:center;">
+              <div style="font-size:28px;font-weight:800;color:var(--success);font-variant-numeric:tabular-nums;">1</div>
+              <div class="text-xs text-muted mt-4">Concluídas</div>
+            </div>
+            <div style="width:1px;height:40px;background:var(--border-color);"></div>
+            <div style="text-align:center;">
+              <div style="font-size:28px;font-weight:800;color:var(--text-primary);font-variant-numeric:tabular-nums;">R$ 55.480</div>
+              <div class="text-xs text-muted mt-4">Total poupado nas metas</div>
+            </div>
+            <div style="width:1px;height:40px;background:var(--border-color);"></div>
+            <div style="flex:1;">
+              <div class="text-sm font-semibold mb-4" style="color:var(--text-primary);">Progresso geral</div>
+              <div style="height:10px;background:var(--border-color);border-radius:99px;overflow:hidden;">
+                <div style="height:100%;width:54%;background:linear-gradient(90deg,var(--primary),#06b6d4);border-radius:99px;"></div>
+              </div>
+              <div class="text-xs text-muted mt-4">54% do total das metas</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════ PAGE 5 — CHATBOT ════ -->
+      <div class="page-divider" id="chatbot">
+        <span>Chatbot IA</span>
+        <code>/chatbot</code>
+      </div>
+
+      <div class="page-section">
+        <div class="grid-2">
+
+          <!-- Chat Window -->
+          <div class="card">
+            <div class="card-header">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div style="width:32px;height:32px;background:var(--primary-light);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;">🤖</div>
+                <div>
+                  <div class="card-title">Assistente Financeiro</div>
+                  <div class="card-subtitle" style="color:var(--success);">● Online agora</div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chat-window">
+                <!-- Bot message 1 -->
+                <div class="chat-msg bot">
+                  <div class="chat-avatar bot-av">🤖</div>
+                  <div>
+                    <div class="chat-bubble bot-bubble">Olá Miguel! Como posso te ajudar hoje? Você pode me perguntar sobre saldo, gastos, metas ou investimentos.</div>
+                    <span class="chat-time">09:00</span>
+                  </div>
+                </div>
+
+                <!-- User message -->
+                <div class="chat-msg user">
+                  <div class="chat-avatar user-av">M</div>
+                  <div>
+                    <div class="chat-bubble user-bubble">Qual foi meu maior gasto esse mês?</div>
+                    <span class="chat-time user-time">09:02</span>
+                  </div>
+                </div>
+
+                <!-- Bot message 2 -->
+                <div class="chat-msg bot">
+                  <div class="chat-avatar bot-av">🤖</div>
+                  <div>
+                    <div class="chat-bubble bot-bubble">🤖 Em Abril, seu maior gasto foi <strong>Aluguel — R$ 1.800,00</strong>, representando 37% das despesas totais. Em seguida vem Alimentação com R$ 420,00.</div>
+                    <span class="chat-time">09:02</span>
+                  </div>
+                </div>
+
+                <!-- User message 2 -->
+                <div class="chat-msg user">
+                  <div class="chat-avatar user-av">M</div>
+                  <div>
+                    <div class="chat-bubble user-bubble">E quanto tenho investido em renda fixa?</div>
+                    <span class="chat-time user-time">09:05</span>
+                  </div>
+                </div>
+
+                <!-- Bot message 3 -->
+                <div class="chat-msg bot">
+                  <div class="chat-avatar bot-av">🤖</div>
+                  <div>
+                    <div class="chat-bubble bot-bubble">🤖 Você tem <strong>R$ 39.300,00</strong> em Renda Fixa — 45% do portfólio. Composto por CDB Nubank (R$ 16.230) + Tesouro IPCA+ (R$ 10.850) + LCI Itaú (R$ 12.220). Rendimento médio: 8.4% a.a.</div>
+                    <span class="chat-time">09:05</span>
+                  </div>
+                </div>
+
+                <!-- Input -->
+                <div class="chat-input-row">
+                  <input class="chat-input" type="text" placeholder="Digite sua pergunta financeira..."/>
+                  <button class="chat-send">➤</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Intents Panel -->
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">Perguntas Sugeridas</div>
+                  <div class="card-subtitle">Clique para usar</div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="intent-tags">
+                  <span class="badge blue">💰 saldo</span>
+                  <span class="badge amber">📊 gastos</span>
+                  <span class="badge green">📈 investimentos</span>
+                  <span class="badge purple">🎯 metas</span>
+                  <span class="badge indigo">📅 projeção</span>
+                  <span class="badge red">⚠️ alertas</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <div class="filter-chip" style="justify-content:flex-start;border-radius:8px;">"Quanto tenho no total hoje?"</div>
+                  <div class="filter-chip" style="justify-content:flex-start;border-radius:8px;">"Em que estou gastando mais?"</div>
+                  <div class="filter-chip" style="justify-content:flex-start;border-radius:8px;">"Qual minha rentabilidade este mês?"</div>
+                  <div class="filter-chip" style="justify-content:flex-start;border-radius:8px;">"Quando vou atingir minha meta de viagem?"</div>
+                  <div class="filter-chip" style="justify-content:flex-start;border-radius:8px;">"Tenho algum investimento vencendo?"</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Últimas Consultas</div>
+              </div>
+              <div class="card-body" style="display:flex;flex-direction:column;gap:10px;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span class="badge amber">gastos</span>
+                  <span class="text-sm text-secondary" style="flex:1;">"Meu maior gasto esse mês?"</span>
+                  <span class="text-xs text-muted">09:02</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span class="badge green">investimentos</span>
+                  <span class="text-sm text-secondary" style="flex:1;">"Quanto em renda fixa?"</span>
+                  <span class="text-xs text-muted">09:05</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span class="badge blue">saldo</span>
+                  <span class="text-sm text-secondary" style="flex:1;">"Saldo atual de todas as contas"</span>
+                  <span class="text-xs text-muted">Ontem</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom spacer -->
+      <div style="height:40px;"></div>
+
+    </div><!-- /content -->
+  </div><!-- /main-area -->
+</div><!-- /app-shell -->
+</body>
+</html>

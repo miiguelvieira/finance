@@ -6,8 +6,8 @@ rules:
   # Salário / renda
   - ["\\bsalario\\b|\\bsalário\\b|\\bfolha\\b|\\bpagamento\\s+mensal\\b", "salario", "emprego"]
   - ["\\bfreela\\b|\\bfreelance\\b|\\bprestacao\\b|\\bprestação\\b|\\bhonorario\\b", "freelance", "servico"]
-  - ["\\bdividendo\\b|\\bjcp\\b|\\bjuros\\s+capital\\b|\\bproventos\\b", "dividendos", "investimento"]
-  - ["\\brendimento\\b|\\bcdb\\b|\\blci\\b|\\blca\\b|\\btesouro\\b", "dividendos", "renda_fixa"]
+  - ["\\bdividendos?\\b|\\bjcp\\b|\\bjuros\\s+capital\\b|\\bproventos\\b", "dividendos", "investimento"]
+  - ["\\brendimento\\b|\\bcdb\\b|\\blci\\b|\\blca\\b", "dividendos", "renda_fixa"]
 
   # Moradia
   - ["\\baluguel\\b|\\bcondominio\\b|\\bcondomínio\\b|\\biptu\\b", "moradia", "aluguel"]
@@ -56,5 +56,5 @@ rules:
   - ["\\bcelular\\b|\\btim\\b|\\bvivo\\b|\\bclaro\\b|\\boi\\s+movel\\b|\\bnextel\\b", "assinaturas", "telefonia"]
 
   # Investimentos
-  - ["\\baplicacao\\b|\\baplicação\\b|\\binvestimento\\b|\\bcompra\\s+de\\s+acoes\\b|\\btesouro\\s+direto\\b", "investimentos", "aporte"]
+  - ["\\baplicacao\\b|\\baplicacao\\b|\\binvestimento\\b|\\bcompra\\s+de\\s+acoes\\b|\\btesouro\\s+direto\\b|\\btesouro\\b", "investimentos", "aporte"]
   - ["\\bresgate\\b|\\bvenda\\s+de\\s+acoes\\b|\\bsaque\\b", "investimentos", "resgate"]

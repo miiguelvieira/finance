@@ -9,6 +9,7 @@ from typing import Generator
 from sqlalchemy import create_engine, event
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.pool import StaticPool
 
 from src.core.models import Base
 
@@ -19,10 +20,14 @@ def get_engine(database_url: str = "sqlite:///data/finance.db") -> Engine:
         db_path = Path(database_url.replace("sqlite:///", ""))
         db_path.parent.mkdir(parents=True, exist_ok=True)
 
-    engine = create_engine(
-        database_url,
-        connect_args={"check_same_thread": False} if "sqlite" in database_url else {},
-    )
+    is_memory = database_url == "sqlite:///:memory:"
+    kwargs: dict = {}
+    if "sqlite" in database_url:
+        kwargs["connect_args"] = {"check_same_thread": False}
+    if is_memory:
+        kwargs["poolclass"] = StaticPool  # uma única conexão compartilhada
+
+    engine = create_engine(database_url, **kwargs)
 
     # Habilita foreign keys no SQLite
     if "sqlite" in database_url:

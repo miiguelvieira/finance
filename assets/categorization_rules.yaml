@@ -1,0 +1,60 @@
+# Regras de categorização automática de transações.
+# Ordem importa: primeira regra que bater vence.
+# Formato: [pattern_regex, categoria, subcategoria]
+
+rules:
+  # Salário / renda
+  - ["\\bsalario\\b|\\bsalário\\b|\\bfolha\\b|\\bpagamento\\s+mensal\\b", "salario", "emprego"]
+  - ["\\bfreela\\b|\\bfreelance\\b|\\bprestacao\\b|\\bprestação\\b|\\bhonorario\\b", "freelance", "servico"]
+  - ["\\bdividendo\\b|\\bjcp\\b|\\bjuros\\s+capital\\b|\\bproventos\\b", "dividendos", "investimento"]
+  - ["\\brendimento\\b|\\bcdb\\b|\\blci\\b|\\blca\\b|\\btesouro\\b", "dividendos", "renda_fixa"]
+
+  # Moradia
+  - ["\\baluguel\\b|\\bcondominio\\b|\\bcondomínio\\b|\\biptu\\b", "moradia", "aluguel"]
+  - ["\\bluz\\b|\\benergia\\b|\\bcelpe\\b|\\bcomgas\\b|\\bgas\\s+encanado\\b", "moradia", "energia"]
+  - ["\\bagua\\b|\\bágua\\b|\\bsabesp\\b|\\bcaern\\b|\\bcaesa\\b", "moradia", "agua"]
+  - ["\\binternet\\b|\\bfibra\\b|\\bclaro\\s+net\\b|\\bvivo\\s+fibra\\b|\\btim\\s+live\\b", "moradia", "internet"]
+
+  # Alimentação
+  - ["\\bifood\\b|\\bubereats\\b|\\brappi\\b|\\baiqfome\\b", "alimentacao", "delivery"]
+  - ["\\bsupermercado\\b|\\bcarrefour\\b|\\bextra\\b|\\bassai\\b|\\bpao\\s+de\\s+acucar\\b|\\bwalmarts\\b|\\bhiper\\b", "alimentacao", "supermercado"]
+  - ["\\bpadaria\\b|\\bpanificadora\\b|\\bhortifruit\\b|\\bhortifruti\\b|\\bfeira\\b", "alimentacao", "mercado"]
+  - ["\\brestaurante\\b|\\blanchonete\\b|\\bpizzaria\\b|\\bhamburgueria\\b|\\bsushi\\b|\\bjapones\\b", "alimentacao", "restaurante"]
+  - ["\\bmcdonalds\\b|\\bburger\\s+king\\b|\\bkfc\\b|\\bsubway\\b|\\bchurch\\b", "alimentacao", "fastfood"]
+  - ["\\bcafe\\b|\\bcafé\\b|\\bstarbucks\\b|\\bbob.*s\\b", "alimentacao", "cafe"]
+
+  # Transporte
+  - ["\\buberpay\\b|\\buber\\b|\\b99pay\\b|\\b99taxi\\b|\\bcabify\\b", "transporte", "app"]
+  - ["\\bgasolina\\b|\\bcombustivel\\b|\\bcombustível\\b|\\bposto\\b|\\balcool\\b|\\bethanol\\b|\\bdiesel\\b", "transporte", "combustivel"]
+  - ["\\bestacionamento\\b|\\bparking\\b|\\bzone\\s+azul\\b", "transporte", "estacionamento"]
+  - ["\\bonibus\\b|\\bônibus\\b|\\bmetro\\b|\\bmetrô\\b|\\btrem\\b|\\bbrt\\b|\\btransporte\\s+publico\\b", "transporte", "publico"]
+  - ["\\bpedagio\\b|\\bpedágio\\b|\\bviapar\\b|\\bsemprefree\\b|\\bconcessao\\b", "transporte", "pedagio"]
+
+  # Saúde
+  - ["\\bfarmacia\\b|\\bfármácia\\b|\\bdrogasil\\b|\\braia\\b|\\bpanvel\\b|\\bpachamama\\b", "saude", "farmacia"]
+  - ["\\bconsulta\\b|\\bmedico\\b|\\bmedição\\b|\\bclinica\\b|\\bhospital\\b|\\bumpa\\b", "saude", "consulta"]
+  - ["\\bplano\\s+saude\\b|\\bunimed\\b|\\bbradescocoop\\b|\\bsulamérica\\b|\\bnotre\\s+dame\\b", "saude", "plano"]
+  - ["\\bacademia\\b|\\bsmart\\s+fit\\b|\\bbiofit\\b|\\bgyms\\b|\\bpersonal\\b", "saude", "academia"]
+
+  # Educação
+  - ["\\bfaculdade\\b|\\buniversidade\\b|\\bmensalidade\\b|\\bmatricula\\b|\\bescola\\b", "educacao", "ensino"]
+  - ["\\bcurso\\b|\\budemy\\b|\\bcoursera\\b|\\bskillshare\\b|\\balura\\b|\\blivro\\b|\\bamazon.*book\\b", "educacao", "curso"]
+
+  # Lazer
+  - ["\\bnetflix\\b|\\bspotify\\b|\\bdisney\\b|\\bhbomax\\b|\\bprime\\s+video\\b|\\bcrunchyroll\\b|\\bparamount\\b", "lazer", "streaming"]
+  - ["\\bcinema\\b|\\bcineflix\\b|\\bcinemark\\b|\\bucb\\b|\\bkinoplex\\b", "lazer", "cinema"]
+  - ["\\bsteam\\b|\\bplaystation\\b|\\bxbox\\b|\\bnintendo\\b|\\bgame\\b|\\bjogo\\b", "lazer", "games"]
+  - ["\\bshow\\b|\\bingresso\\b|\\bticketmaster\\b|\\beventos\\b|\\bconcerto\\b", "lazer", "eventos"]
+
+  # Vestuário
+  - ["\\broupas\\b|\\bzara\\b|\\brenner\\b|\\briachuelo\\b|\\bc&a\\b|\\bhm\\b|\\bfarm\\b|\\baramis\\b", "vestuario", "roupas"]
+  - ["\\bcalcado\\b|\\bsapataria\\b|\\bschutz\\b|\\barezzo\\b|\\bnike\\b|\\badidas\\b|\\bshox\\b", "vestuario", "calcados"]
+
+  # Assinaturas
+  - ["\\bmicrosoft\\b|\\boffice\\b|\\bgoogle\\s+one\\b|\\bicloud\\b|\\bdropbox\\b", "assinaturas", "cloud"]
+  - ["\\bseguro\\b|\\bport.*segur\\b|\\bauto\\s+seguro\\b", "assinaturas", "seguro"]
+  - ["\\bcelular\\b|\\btim\\b|\\bvivo\\b|\\bclaro\\b|\\boi\\s+movel\\b|\\bnextel\\b", "assinaturas", "telefonia"]
+
+  # Investimentos
+  - ["\\baplicacao\\b|\\baplicação\\b|\\binvestimento\\b|\\bcompra\\s+de\\s+acoes\\b|\\btesouro\\s+direto\\b", "investimentos", "aporte"]
+  - ["\\bresgate\\b|\\bvenda\\s+de\\s+acoes\\b|\\bsaque\\b", "investimentos", "resgate"]

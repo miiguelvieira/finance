@@ -1,0 +1,51 @@
+app:
+  name: "Finance"
+  version: "0.1.0"
+  debug: false
+
+server:
+  dash_port: 8050
+  api_port: 8000
+  host: "127.0.0.1"
+
+database:
+  path: "data/finance.db"
+  echo: false
+
+pluggy:
+  sandbox: true
+  sync_interval_hours: 6
+
+projection:
+  months_forward: 12
+  variance_pct: 0.15
+
+tax:
+  year: 2026
+  renda_fixa_rate: 0.175
+  lci_lca_rate: 0.05
+  acoes_normal_rate: 0.175
+  acoes_day_trade_rate: 0.20
+  acoes_quarterly_exempt_limit: 60000.0
+  fii_dividend_rate: 0.05
+  fii_capital_gain_rate: 0.175
+  loss_carryforward_years: 5
+
+dashboard:
+  theme: "dark"
+  currency: "BRL"
+  locale: "pt_BR"
+  balance_history_days: 365
+  chart_colors:
+    positive: "#26a69a"
+    negative: "#ef5350"
+    accent: "#2962ff"
+    neutral: "#b0bec5"
+    background: "#131722"
+    surface: "#1e222d"
+    grid: "rgba(255,255,255,0.05)"
+    text: "#d1d4dc"
+
+logging:
+  level: "INFO"
+  path: "logs/"
